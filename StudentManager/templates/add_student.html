@@ -1,0 +1,66 @@
+{% extends "base_manager.html" %}
+{% block content %}
+    <div class="info-panel" style="width: 40%" id="tablecontainer">
+        <form action="/add_student_info/" method="post" class="fh5co-form animate-box" data-animate-effect="fadeIn">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">账号</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="账号"
+                       autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="密码"
+                       autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label for="name">姓名</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="姓名"
+                       autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label for="sex">性别</label>
+                <select class="form-control" name="sex" id="sex">
+                    <option value="男" {% if sex == "男" %}selected{% endif %}>男</option>
+                    <option value="女" {% if sex == "女" %}selected{% endif %}>女</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="birth_day">出生年月</label>
+                <input type="date" class="form-control" placeholder="出生年月" name="birth_day"
+                       aria-describedby="sizing-addon1">
+            </div>
+        <div class="form-group">
+                <label for="native_place">籍贯</label>
+                <input type="text" class="form-control" placeholder="籍贯" name="native_place"
+                       aria-describedby="sizing-addon1">
+            </div>
+            <div class="form-group">
+                <label for="major">专业班级</label>
+                <select name="clazz_info" class="form-control">
+                    {% for row in clazzs %}
+                        <option>{{ row.id }}-{{ row.major_id.name }}-{{ row.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group" style="text-align: center;">
+                <input type="submit" style="background-color: #007bff;border-color: #007bff;" value="提交信息" class="btn btn-primary">
+                <a type="button" style="border-color: #6c757d;" class="btn btn-secondary" href="/manager_index/">返回</a>
+            </div>
+
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="panel panel-warning" style="margin: 0 auto;background-color:lightgoldenrodyellow;text-align: center">
+                            <div class="panel-body">
+                                {{ message }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+        </form>
+    </div>
+{% endblock %}

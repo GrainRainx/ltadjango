@@ -1,0 +1,46 @@
+{% extends "base_manager.html" %}
+{% block content %}
+    <div class="info-panel" style="width: 40%" id="tablecontainer">
+        <form action="{% url 'change_teacher_info' %}" method="post"
+              role="search">
+            {% csrf_token %}
+
+            <input value="{{ teacher.id }}" hidden name="teacher_id">
+
+            <div class="panel-body" >
+                <label>姓名</label>
+                <input type="text" class="form-control" placeholder="姓名" name="name" value="{{ teacher.name }}"
+                       aria-describedby="sizing-addon1">
+            </div>
+            <div class="panel-body" >
+                <label>性别</label>
+                <select class="form-control" name="sex" id="sex" style="height: 40px">
+                                            <option value="男" {% if sex == "男" %}selected{% endif %}>男</option>
+                                            <option value="女" {% if sex == "女" %}selected{% endif %}>女</option>
+                                        </select>
+            </div>
+            <div class="panel-body" >
+                <label>出生日期</label>
+                <input type="date" class="form-control" placeholder="出生年月" name="birth_day"
+                       value="{{ teacher.birth_day }}"
+                       aria-describedby="sizing-addon1">
+            </div>
+
+      <div style="text-align: center">
+            <input type="submit" style="background-color: #007bff;border-color: #007bff;" value="修改信息" class="btn btn-primary">
+            <a type="button" style="border-color: #6c757d;" class="btn btn-secondary" href="/teachers_info/">返回</a>
+      </div>
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="panel panel-warning">
+                            <div class="panel-body" style="text-align: center;">
+                                {{ message }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </form>
+    </div>
+{% endblock %}

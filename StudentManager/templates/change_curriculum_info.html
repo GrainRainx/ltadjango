@@ -1,0 +1,38 @@
+{% extends "base_manager.html" %}
+{% block content %}
+<div class="info-panel" style="width: 40%" id="tablecontainer">
+    <h2>修改课程信息</h2>
+    <form action="{% url 'change_curriculum_info' curriculum.id %}" method="post">
+        {% csrf_token %}
+        <div class="panel-body">
+            <label for="curriculumName">课程名</label>
+            <input type="text" class="form-control" id="curriculumName" name="name" value="{{ curriculum.name }}">
+        </div>
+        <div class="panel-body">
+            <label for="teacherId">教师</label>
+            <select name="teacher_id" class="form-control" id="teacherId">
+                {% for teacher in teachers %}
+                    <option value="{{ teacher.id }}" {% if curriculum.teacher_id.id == teacher.id %}selected{% endif %}>
+                        {{ teacher.id }}-{{ teacher.name }}-{{ teacher.sex }}-{{ teacher.birth_day }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div style="text-align: center">
+            <input type="submit" style="background-color: #007bff;border-color: #007bff;" value="修改信息" class="btn btn-primary">
+            <a type="button" style="border-color: #6c757d;" class="btn btn-secondary" href="/curriculum/">返回</a>
+        </div>
+               {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="panel panel-warning" style="margin: 0 auto;background-color:lightgoldenrodyellow;text-align: center">
+                            <div class="panel-body">
+                                {{ message }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+    </form>
+</div>
+{% endblock %}

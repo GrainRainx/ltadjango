@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh">
+<style>
+        .page-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+        }
+
+        .page-inner {
+            width: 90%;
+        }
+        .info-panel {
+            width:100%;
+            margin: 0 auto;
+            background: linear-gradient(to right, #ffffff, #f2f2f2);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .output-panel {
+            background-color: #ffffff   ;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 5px;
+        }
+        .modal-dialog {
+    width: 60%; /* 调整模态框的宽度 */
+    margin: 30px auto; /* 居中显示 */
+}
+
+    .modal-content {
+        padding: 15px;
+        border-radius: 5px; /* 圆角效果 */
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* 添加阴影效果 */
+    }
+    .modal-body .form-group {
+        margin-bottom: 15px; /* 增加每个表单元素的底部外边距 */
+    }
+
+    .modal-body label {
+        display: block; /* 使标签独占一行 */
+        margin-bottom: 5px; /* 在标签和输入字段之间添加一些空间 */
+    }
+
+    .modal-body input[type="text"],
+    .modal-body input[type="date"] {
+        width: 100%; /* 让输入框填满容器宽度 */
+        padding: 6px 12px; /* 输入框内部的填充 */
+        border: 1px solid #ccc; /* 细边框样式 */
+        border-radius: 4px; /* 轻微的圆角效果 */
+    }
+    .modal-footer .btn {
+        padding: 10px 20px; /* 增加按钮的填充，让它们更大 */
+        margin: 0 5px; /* 两个按钮之间的间距 */
+    }
+
+    .modal-footer .btn-primary {
+        background-color: #007bff; /* 主按钮的背景颜色 */
+        border-color: #007bff; /* 主按钮的边框颜色 */
+    }
+
+    .modal-footer .btn-secondary {
+        border-color: #6c757d; /* 次要按钮的边框颜色 */
+    }
+
+
+    .table-weekday {
+        width: 150px; /* 每个星期的列宽度 */
+    }
+
+
+</style>
+
+
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title></title>
+<!-- Bootstrap Styles-->
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+<!-- FontAwesome Styles-->
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+<!-- Custom Styles-->
+<link href="/static/assets/css/custom-styles.css" rel="stylesheet"/>
+<!-- TABLE STYLES-->
+<link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css" rel="stylesheet"/>
+
+</head>
+<body>
+<div id="wrapper">
+    <nav class="navbar navbar-default top-navbar" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand"><i class="fa fa-gear"></i> <strong>学生信息管理系统</strong></a>
+        </div>
+
+        <ul class="nav navbar-top-links navbar-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                    <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-user">
+                    <li><a onclick=logout() style="cursor:pointer"><i class="fa fa-sign-out fa-fw"></i> 退出登录</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <nav class="navbar-default navbar-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav" id="main-menu">
+                <li><a href="/majors/" style="cursor:pointer"><i class="fa fa-table"></i>专业管理</a>
+                </li>
+                <li><a href="/clazzs/" style="cursor:pointer"><i class="fa fa-table"></i>班级管理</a>
+                </li>
+                <li><a href="/curriculum/" style="cursor:pointer"><i class="fa fa-table"></i>课程管理</a>
+                </li>
+                <li><a href="/manager_index/" style="cursor:pointer"><i class="fa fa-table"></i>学生信息管理</a>
+                </li>
+                <li><a href="/teachers_info/" style="cursor:pointer"><i class="fa fa-table"></i>教师信息管理</a>
+                </li>
+
+            </ul>
+        </div>
+    </nav>
+    <div id="page-wrapper">
+        <div id="page-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="page-header">
+                        {% if title %}
+                            <strong id="welcome">{{ title }}</strong>
+                        {% else %}
+                            <strong id="welcome">欢迎来到管理员界面</strong>
+                        {% endif %}
+                    </h1>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-wrapper">
+                        <div class="page-inner">
+                            {% block content %}{% endblock content %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- jQuery Js -->
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<!-- Bootstrap Js -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- Metis Menu Js -->
+<script src="https://cdn.jsdelivr.net/npm/metismenu"></script>
+<!-- DATA TABLE SCRIPTS -->
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#dataTables-example').dataTable();
+    });
+    // 当用户点击编辑链接时触发
+
+
+</script>
+
+<script type="text/javascript">
+    function delCookie() {
+        var keys = document.cookie.match(/[^ =;]+(?==)/g)
+        if (keys) {
+            for (var i = keys.length; i--;) {
+                document.cookie = keys[i] + '=0;path=/;expires=' + new Date(0).toUTCString() // 清除当前域名下的,例如：m.ratingdog.cn
+                document.cookie = keys[i] + '=0;path=/;domain=' + document.domain + ';expires=' + new Date(0).toUTCString() // 清除当前域名下的，例如 .m.ratingdog.cn
+                document.cookie = keys[i] + '=0;path=/;domain=ratingdog.cn;expires=' + new Date(0).toUTCString() // 清除一级域名下的或指定的，例如 .ratingdog.cn
+            }
+        }
+    }
+
+    function logout() {
+        if (confirm("您确定退出吗？")) {
+            window.location.href = '/logout/'
+        }
+    }
+
+    function deleteStudent(sid) {
+        $.get("/delete_student/?id=" + sid, function (data, status) {
+            alert(data.message);
+            location.reload();
+        });
+    }
+
+    function deleteTeacher(sid) {
+        $.get("/delete_teacher/?id=" + sid, function (data, status) {
+            alert(data.message);
+            location.reload();
+        });
+    }
+
+
+function deleteCurriculum(curriculumId) {
+    if(confirm('确定要删除这个课程吗？')) {
+        $.ajax({
+            url: '/delete_curriculum/' + curriculumId,
+            type: 'DELETE',
+            headers: {'X-CSRFToken': getCookie('csrftoken')},
+            success: function(result) {
+                // 处理成功的情况，例如重新加载页面或从表格中删除行
+                window.location.reload();
+            },
+            error: function(error) {
+                // 处理错误的情况
+                alert('删除失败');
+            }
+        });
+    }
+}
+
+
+function deleteClazz(clazzId) {
+    if(confirm('确定要删除这个班级吗？')) {
+        $.ajax({
+            url: '/delete_clazz/' + clazzId,
+            type: 'DELETE',
+            headers: {'X-CSRFToken': getCookie('csrftoken')},
+            success: function(result) {
+                // 处理成功的情况，例如重新加载页面或从表格中删除行
+                window.location.reload();
+            },
+            error: function(error) {
+                // 处理错误的情况
+                alert('删除失败');
+            }
+        });
+    }
+}
+
+function deleteMajor(majorId) {
+    if(confirm('确定要删除这个专业吗？')) {
+        $.ajax({
+            url: '/delete_major/' + majorId,
+            type: 'DELETE',
+            headers: {'X-CSRFToken': getCookie('csrftoken')},
+            success: function(result) {
+                // 处理成功的情况，例如重新加载页面或从表格中删除行
+                window.location.reload();
+            },
+            error: function(error) {
+                // 处理错误的情况
+                alert('删除失败');
+            }
+        });
+    }
+}
+
+function deleteTimeTable() {
+    var clazzId = document.querySelector('input[name="clazz_id"]').value;
+    var week = document.querySelector('select[name="week"]').value;
+    var tableTime = document.querySelector('select[name="table_time"]').value;
+    var curriculumId = document.querySelector('select[name="curriculum"]').value;
+
+    if(confirm('确定要删除这个课表项吗？')) {
+        $.ajax({
+            url: '/delete_time_table/',
+            type: 'POST',
+            data: {
+                'clazz_id': clazzId,
+                'week': week,
+                'table_time': tableTime,
+                'curriculum_id': curriculumId
+            },
+            headers: {'X-CSRFToken': getCookie('csrftoken')},
+            success: function(result) {
+                // 处理成功的情况
+                window.location.reload();
+            },
+            error: function(error) {
+                // 处理错误的情况
+                alert('删除失败');
+            }
+        });
+    }
+}
+
+
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+
+
+
+
+</script>
+
+<script type="text/javascript">
+
+</script>
+
+
+</body>
+</html>
+
+

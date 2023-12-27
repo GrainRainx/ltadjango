@@ -1,0 +1,65 @@
+{% extends "base_manager.html" %}
+{% block content %}
+    <div class="info-panel" style="width: 40%" id="tablecontainer">
+        <form action="{% url 'change_student_info' %}" method="post"
+              role="search">
+            {% csrf_token %}
+
+            <input value="{{ sid }}" hidden name="student_id">
+
+            <div class="panel-body" >
+                <label>姓名</label>
+                <input type="text" class="form-control" placeholder="姓名" name="name" value="{{ student.name }}"
+                       aria-describedby="sizing-addon1">
+            </div>
+            <div class="panel-body" >
+                <label>性别</label>
+                <select class="form-control" name="sex" id="sex">
+                    <option value="男" {% if sex == "男" %}selected{% endif %}>男</option>
+                    <option value="女" {% if sex == "女" %}selected{% endif %}>女</option>
+                </select>
+            </div>
+            <div class="panel-body">
+                <label>出生年月</label>
+                <input type="text" class="form-control" placeholder="出生年月" name="birth_day"
+                       value="{{ student.birth_day }}"
+                       aria-describedby="sizing-addon1">
+            </div>
+
+            <div class="panel-body">
+                <label>籍贯</label>
+                <input type="text" class="form-control" placeholder="籍贯" name="native_place"
+                       value="{{ student.native_place }}"
+                       aria-describedby="sizing-addon1">
+            </div>
+            <div class="panel-body">
+                <label>专业-班级</label>
+                <select class="form-control" name="clazz">
+                    {% for row in clazzs %}
+                        {% if row.id == current_clazz_id %}
+                            <option value="{{ row.id }}"
+                                    selected="selected">{{ row.major_id.name }}-{{ row.name }}</option>
+                        {% else %}
+                            <option value="{{ row.id }}">{{ row.major_id.name }}-{{ row.name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+        <div style="text-align: center">
+            <input type="submit" style="background-color: #007bff;border-color: #007bff;" value="修改信息" class="btn btn-primary">
+            <a type="button" style="border-color: #6c757d;" class="btn btn-secondary" href="/manager_index/">返回</a>
+        </div>
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="panel panel-warning" style="margin: 0 auto;background-color:lightgoldenrodyellow;text-align: center">
+                            <div class="panel-body">
+                                {{ message }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </form>
+    </div>
+{% endblock %}

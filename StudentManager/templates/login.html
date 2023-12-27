@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <title>登录</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url(/static/img/bg.jpg);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: black;
+        }
+        .login-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            width: 50%; /* 容器宽度设为50% */
+            max-width: 400px; /* 最大宽度为500px */
+            padding-bottom: 40px; /* 增加底部填充以增加高度 */
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #5cb85c;
+            color: white;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #4cae4c;
+        }
+        .messages {
+            color: red;
+            margin-bottom: 15px;
+        }
+        a {
+            display: inline-block;
+            margin-top: 10px;
+            float: right; /* 将链接移动到右边 */
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+    <div class="header">
+        欢迎使用学生信息管理系统
+    </div>
+        <form action="/login/" method="post">
+            {% csrf_token %}
+            <h2>登 录</h2>
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input type="text" id="username" name="username" placeholder="请输入用户名" autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" id="password" name="password" placeholder="请输入密码" autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label for="remember"><input type="checkbox" id="remember">记住密码</label>
+            </div>
+            {% if message %}
+                <div class="messages">
+                    {% for msg in message %}
+                        <div>{{ msg }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div class="form-group">
+                <input type="submit" value="登 录">
+            </div>
+            <div class="form-group">
+                    <a href="/register/">去注册</a>
+            </div>
+
+        </form>
+    </div>
+</body>
+</html>

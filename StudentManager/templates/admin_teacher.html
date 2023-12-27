@@ -1,0 +1,56 @@
+{% extends "base_manager.html" %}
+
+{% block content %}
+
+    <div class="info-panel" id="tablecontainer">
+        <form style="margin-bottom: 10px" action="{% url 'teacher_search' %}" method="get" class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="搜索教师" aria-label="Search" name="query">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
+            <a href="/teachers_info/" class="btn btn-secondary" style="border-color: #6c757d;" type="submit">取消</a>
+        </form>
+        <table border="1" class="table table-striped table-bordered table-hover"
+               style="width: 100%; border-collapse: collapse;">
+            <thead>
+            <tr style="text-align: center;">
+                <td>老师工号</td>
+                <td>老师姓名</td>
+                <td>性别</td>
+                <td>出生年份</td>
+                <td>操作</td>
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for teacher in teachers %}
+                <tr style="text-align: center;">
+                    <td>{{ teacher.teacher_id }}</td>
+                    <td>{{ teacher.name }}</td>
+                    <td>{{ teacher.sex }}</td>
+                    <td>{{ teacher.birth_day }}</td>
+                    <td style="cursor: pointer;">
+                        <a type="button" class="btn btn-primary" style="background-color: #007bff;border-color: #007bff;" href="/change_teacher_info/?teacher_id={{ teacher.id }}">修改信息</a>
+                        <button class="btn btn-danger" style="border-color: #6c757d;" href="javascript:void(0);"
+                                onclick="deleteTeacher({{ teacher.id }})">删除</button>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="7">没有找到匹配的教师信息。</td></tr>
+            {% endfor %}
+                    <a type="button" class="btn btn-primary" data-toggle="modal" href="/add_teacher_info/"
+                    style="margin-bottom: 5px;background-color: #007bff;border-color: #007bff;">
+                        添加教师
+                    </a>
+            {% if messages %}
+                <div class="alert alert-success" style="text-align: center">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+            {% endfor %}
+                </div>
+    {% endif %}
+
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
+

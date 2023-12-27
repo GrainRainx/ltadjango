@@ -1,0 +1,40 @@
+{% extends "base_manager.html" %}
+{% block content %}
+    <div class="info-panel" style="width: 40%;margin-top: 5%;height: 300px" id="tablecontainer">
+        <form action="/add_clazz/" method="post" class="fh5co-form animate-box" data-animate-effect="fadeIn" style="margin-top: 10%">
+            {% csrf_token %}
+            <div class="form-group" style="margin-bottom:10%">
+
+                <label for="name" class="sr-only">专业名称</label>
+                <select class="form-control" name="major">
+                    {% for row in majors %}
+                        <option>{{ row.major_code }}-{{ row.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+         <div class="form-group">
+
+                <label for="name" class="sr-only">专业名称</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="班级名称（2015级1班）"
+                       autocomplete="off">
+            </div>
+            <div class="form-group" style="text-align: center;">
+                <input type="submit" style="background-color: #007bff;border-color: #007bff;" value="提交信息" class="btn btn-primary">
+                <a type="button" style="border-color: #6c757d;" class="btn btn-secondary" href="/clazzs/">返回</a>
+            </div>
+
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="panel panel-warning" style="margin: 0 auto;background-color:lightgoldenrodyellow;text-align: center">
+                            <div class="panel-body">
+                                {{ message }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+        </form>
+    </div>
+{% endblock %}

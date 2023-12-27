@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>学生信息</title>
+    <!-- Bootstrap Styles - CDN link -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+    <!-- FontAwesome Styles - CDN link -->
+    <link href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" rel="stylesheet"/>
+    <!-- Custom Styles-->
+    <!-- 请确保这个链接是公开可访问的，或者保留为本地引用 -->
+    <link href="/static/assets/css/custom-styles.css" rel="stylesheet"/>
+</head>
+<style>
+        .info-panel {
+            max-width:50%;
+            margin: 0 auto;
+            background: linear-gradient(to right, #ffffff, #f2f2f2);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+
+        .output-panel {
+            background-color: #ffffff   ;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 5px;
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            margin-bottom: 10px;
+        }
+
+        .input-group-lg input {
+            width: 100%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+       .button-container {
+        text-align: center;
+        width: 100%;
+        max-width: 500px;
+        margin-top: 20px;
+    }
+        .dropdown-menu.dropdown-user {
+        background-color: #FFFFFF;
+        border-radius: 4px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+
+    }
+
+    .dropdown-menu.dropdown-user li a {
+        color: #333;
+        padding: 10px 20px;
+        display: block;
+        text-align: center;
+        transition: background-color 0.3s;
+    }
+
+    .dropdown-menu.dropdown-user li a:hover {
+        background-color: #eaeaea;
+        color: #555;
+    }
+
+    .dropdown-menu.dropdown-user li a i {
+        margin-right: 5px;
+    }
+active-menu
+        .table-weekday {
+        width: 150px; /* 每个星期的列宽度 */
+    }
+navbar-brand
+</style>
+
+<body>
+<div id="wrapper">
+    <nav class="navbar navbar-default top-navbar" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand"><i class="fa fa-gear"></i> <strong>学生信息管理系统</strong></a>
+        </div>
+
+        <ul class="nav navbar-top-links navbar-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                    <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-user">
+                    <li><a onclick=logout() style="text-align: center"><i class="fa fa-sign-out fa-fw"></i> 退出登录</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <nav class="navbar-default navbar-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav" id="main-menu">
+
+                <li>
+                    {% if not typ %}
+                        <a class="active-menu" href="/student_info/"><i class="fa fa-desktop"></i> 个人信息</a>
+                    {% else %}
+                        <a style="cursor:pointer" href="/student_info/"><i class="fa fa-desktop"></i> 个人信息</a>
+                    {% endif %}
+                </li>
+
+                <li>
+                    {% if typ and typ == 'time_table' %}
+                        <a class="active-menu" id="c" href="/student_time_table/"><i
+                                class="fa fa-edit"></i> 课表</a>
+                    {% else %}
+                        <a style="cursor:pointer" id="c" href="/student_time_table/"><i
+                                class="fa fa-edit"></i> 课表</a>
+                    {% endif %}
+                </li>
+                <li>
+                    {% if typ and typ == 'score' %}
+                        <a class="active-menu" href="/get_student_score/" id="b"><i class="fa fa-table"></i> 成绩</a>
+
+                    {% else %}
+                        <a style="cursor:pointer" href="/get_student_score/" id="b"><i class="fa fa-table"></i> 成绩</a>
+
+                    {% endif %}
+                </li>
+
+
+
+                <li>
+                    {% if typ and typ == 'change_password' %}
+
+                        <a class="active-menu" id="c" href="/student_info/?typ=change_password"><i
+                                class="fa fa-edit"></i> 修改密码</a>
+                    {% else %}
+                        <a style="cursor:pointer" id="c" href="/student_info/?typ=change_password"><i
+                                class="fa fa-edit"></i> 修改密码</a>
+                    {% endif %}
+                </li>
+
+            </ul>
+
+        </div>
+
+    </nav>
+    <div id="page-wrapper">
+        <div id="page-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="page-header">
+                        {{ title }}
+                    </h1>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-12">
+                    <div class="info-panel">
+                        {% if not typ %}
+                            <div class="panel-body">
+                                <label>学号</label>
+                                <div class="output-panel" id="id">
+                                    {{ student_id }}
+                                </div>
+                                <label>姓名</label>
+                                <div class="output-panel" id="name">
+                                    {{ name }}
+                                </div>
+                                <label>性别</label>
+                                <div class="output-panel" id="sex">
+                                    {{ sex }}
+                                </div>
+                                <label>出生年份</label>
+                                <div class="output-panel" id="birth_year">
+                                    {{ birth_day }}
+                                </div>
+                                <label>籍贯</label>
+                                <div class="output-panel" id="province">
+                                    {{ native_place }}
+                                </div>
+                                <label>专业</label>
+                                <div class="output-panel" id="major_name">
+                                    {{ major }}
+                                </div>
+                                <label>班级</label>
+                                <div class="output-panel" id="major_name">
+                                    {{ clazz }}
+                                </div>
+                                <div class="button-container">
+                                    <a type="button" style="background-color: #007bff;border-color: #007bff;" class="btn btn-primary" href="/student_info/?typ=update"
+                                   style="margin: 5px">修改信息</a>
+                                </div>
+                            </div>
+                        {% elif typ == 'update' %}
+                            <div class="panel-body">
+                                <form action="{% url 'student_info' %}" method="post"
+                                      role="search">
+                                    {% csrf_token %}
+
+                                    {% if tid %}
+                                        <input value="{{ sid }}" hidden name="student_id">
+                                    {% endif %}
+                                    <input hidden value="info" name="req_typ">
+                                    <div style="margin: 20px 0">
+                                            <label>姓名</label>
+                                            <input type="text" class="form-control" placeholder="姓名" name="name"
+                                                   value="{{ name }}" aria-describedby="sizing-addon1" style="height: 40px">
+                                    </div>
+                                    <div style="margin: 20px 0">
+                                        <label>性别</label>
+                                        <select class="form-control" name="sex" id="sex" style="height: 40px">
+                                            <option value="男" {% if sex == "男" %}selected{% endif %}>男</option>
+                                            <option value="女" {% if sex == "女" %}selected{% endif %}>女</option>
+                                        </select>
+                                    </div>
+                                    <div style="margin: 20px 0">
+                                        <label>出生年月</label>
+                                        <input type="date" class="form-control" placeholder="出生年月" name="birth_day"
+                                               value="{{ birth_day }}" aria-describedby="sizing-addon1" style="height: 40px">
+                                    </div>
+                                    <div style="margin: 20px 0">
+                                        <label>籍贯</label>
+                                        <input type="text" class="form-control" placeholder="籍贯" name="native_place"
+                                               value="{{ native_place }}" aria-describedby="sizing-addon1" style="height: 40px">
+                                    </div>
+                                    <div style="margin: 20px 0">
+                                        <label>专业-班级</label>
+                                        <select class="form-control" name="clazz" style="height: 40px">
+                                            {% for row in clazzs %}
+                                                <option>{{ row.major_id.name }}-{{ row.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                <div style="text-align: center">
+                                    <button type="submit" class="btn btn-primary" style="background-color: #007bff;border-color: #007bff;">提交信息</button>
+                                </div>
+                                </form>
+                            </div>
+                            {% if message %}
+                                <div class="alert alert-warning alert-dismissible" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                            aria-hidden="true">&times;</span></button>
+                                    <strong>错误：</strong> {{ message }}
+                                </div>
+                            {% endif %}
+                        {% elif typ == 'change_password' %}
+                            <div class="panel-body">
+                            <form action="{% url 'student_info' %}" method="post"
+                                  role="search">
+                                {% csrf_token %}
+
+                                {% if tid %}
+                                    <input value="{{ tid }}" hidden name="teacher_id">
+                                {% endif %}
+                                <input hidden value="password" name="req_typ">
+                                <div  style="margin: 20px 0">
+                                    <label>请输入新密码</label>
+                                    <input type="password" class="form-control" placeholder="密码" name="password"
+                                           aria-describedby="sizing-addon1" style="height: 40px">
+                                </div>
+                                <div  style="margin: 20px 0">
+                                    <label>请再次输入</label>
+                                    <input type="password" class="form-control" placeholder="密码" name="password-again"
+                                           aria-describedby="sizing-addon1" style="height: 40px">
+                                </div>
+
+                                <div class="button-container">
+                                    <button type="submit" style="background-color: #007bff;border-color: #007bff;" class="btn btn-primary">提交密码</button>
+                                </div>
+                            </form>
+                            </div>
+                            {% if message %}
+                                <div class="alert alert-warning alert-dismissible" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                            aria-hidden="true">&times;</span></button>
+                                    <strong>错误：</strong> {{ message }}
+                                </div>
+                                </div>
+                            {% endif %}
+                        {% elif typ == 'time_table' %}
+                            <table border="1" class="table table-striped table-bordered table-hover"
+                                   style="width: 1000px; border-collapse: collapse;">
+                                <thead>
+                                <tr>
+                                    <td class="table-weekday">课表</td>
+                                    <td class="table-weekday">星期一</td>
+                                    <td class="table-weekday">星期二</td>
+                                    <td class="table-weekday">星期三</td>
+                                    <td class="table-weekday">星期四</td>
+                                    <td class="table-weekday">星期五</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for k, v in time_table.items %}
+
+                                    <tr>
+                                        {% if k == '1' %}
+                                            <td>{{ k }}（8:00~9:40）</td>
+                                        {% elif k == '2' %}
+                                            <td>{{ k }}（10:00~11:40）</td>
+                                        {% elif k == '3' %}
+                                            <td>{{ k }}（14:00~15:40）</td>
+                                        {% elif k == '4' %}
+                                            <td>{{ k }}（15:50~17:50）</td>
+                                        {% endif %}
+
+                                        {% if v.1 %}
+                                            <td>{{ v.1.curriculum.name }}-{{ v.1.curriculum.teacher_id.name }}</td>
+                                        {% else %}
+                                            <td></td>
+                                        {% endif %}
+
+                                        {% if v.2 %}
+                                            <td>{{ v.2.curriculum.name }}-{{ v.2.curriculum.teacher_id.name }}</td>
+                                        {% else %}
+                                            <td></td>
+                                        {% endif %}
+
+                                        {% if v.3 %}
+                                            <td>{{ v.3.curriculum.name }}-{{ v.3.curriculum.teacher_id.name }}</td>
+                                        {% else %}
+                                            <td></td>
+                                        {% endif %}
+
+                                        {% if v.4 %}
+                                            <td>{{ v.4.curriculum.name }}-{{ v.4.curriculum.teacher_id.name }}</td>
+                                        {% else %}
+                                            <td></td>
+                                        {% endif %}
+
+                                        {% if v.5 %}
+                                            <td>{{ v.5.curriculum.name }}-{{ v.5.curriculum.teacher_id.name }}</td>
+                                        {% else %}
+                                            <td></td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            {% elif typ == 'score' %}
+                            {% if not scores %}
+                                <h1 style="text-align: center">还未出成绩！！</h1>
+                            {% else %}
+                                <table border="1" class="table table-striped table-bordered table-hover"
+                                >
+                                    <thead >
+                                    <tr style="text-align: center">
+                                        <td>课程名</td>
+                                        <td>任教老师</td>
+                                        <td>得分</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for sco in scores %}
+                                        <tr style="text-align: center">
+                                            <td>{{ sco.curriculum_id.name }}</td>
+                                            <td>{{ sco.curriculum_id.teacher_id.name }}</td>
+                                            <td>{{ sco.score }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% endif %}
+                            <blockquote class="blockquote-reverse" style="margin-top: 20px;text-align: center">
+                                如果显示不全，说明任课老师还未填写成绩
+                            </blockquote>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- jQuery Js - CDN link -->
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<!-- Bootstrap Js - CDN link -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<!-- Metis Menu Js - CDN link (如果有可用的CDN) -->
+<script src="PATH_TO_METIS_MENU_CDN"></script>
+<!-- Custom Js -->
+<script src="/static/assets/js/custom-scripts.js"></script>
+
+
+<script type="text/javascript">
+    function logout() {
+        if (confirm("您确定退出吗？")) {
+            window.location.href = '/logout/'
+        }
+    }
+</script>
+
+</body>
+</html>
